@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
-Implementation-Title: imagemanager
+Implementation-Title: web-images
 Implementation-Version: 0.1.0
 Built-By: mica
 Implementation-Vendor-Id: es.codeurjc.daw
 Build-Jdk: 1.8.0_191
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
- ot-starter-parent/imagemanager
+ ot-starter-parent/web-images
 Created-By: Maven Integration for Eclipse
 
