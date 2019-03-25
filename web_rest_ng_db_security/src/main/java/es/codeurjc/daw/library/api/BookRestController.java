@@ -43,8 +43,7 @@ public class BookRestController {
 	@PostMapping("/")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Book createBook(@RequestBody Book book) {
-		service.save(book);
-		return book;
+		return service.save(book);
 	}
 
 	@PutMapping("/{id}")

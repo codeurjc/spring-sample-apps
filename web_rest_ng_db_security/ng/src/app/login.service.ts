@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-const URL = '/api';
+const URL = 'https://localhost:8443/api';
 
 export interface User {
     id?: number;
@@ -15,12 +15,18 @@ export class LoginService {
     isLogged = false;
     isAdmin = false;
     user: User;
+    auth: string;
 
     constructor(private http: HttpClient) {
         this.reqIsLogged();
     }
 
+    getAuth(){
+        return this.auth;
+    }
+
     reqIsLogged(): void {
+        
         const headers = new HttpHeaders({
             'X-Requested-With': 'XMLHttpRequest',
             "Content-Type": "application/json",
@@ -48,10 +54,10 @@ export class LoginService {
     logIn(user: string, pass: string) {
         console.log('user:' + user + ' pass:' + pass);
 
-        const userPass = user + ':' + pass;
+        this.auth = 'Basic '+ utf8_to_b64(user + ':' + pass);
 
         const headers = new HttpHeaders({
-            Authorization: 'Basic ' + utf8_to_b64(userPass),
+            Authorization: this.auth,
             'X-Requested-With': 'XMLHttpRequest',
             "Content-Type": "application/json",
             "Access-Control-Allow-Credentials": "true",

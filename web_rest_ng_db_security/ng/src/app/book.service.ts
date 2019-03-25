@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
+import { LoginService } from './login.service';
 
 export interface Book {
     id?: number;
@@ -9,72 +10,61 @@ export interface Book {
     description: string;
 }
 
-const URL = '/api/books/';
+const URL = 'https://localhost:8443/api/books/';
 @Injectable()
 export class BookService {
-    constructor(private http: HttpClient) {}
+    constructor(private loginService: LoginService, private http: HttpClient) {}
 
     getBooks(): Observable<Book[]> {
-        return this.http.get(URL, { withCredentials: true }).pipe(
-            map((response: Book[]) => {
-                return response;
-            }),
-            catchError((error) => this.handleError(error)),
-        );
+        return this.http.get<Book[]>(URL, { withCredentials: true }).pipe(catchError((error) => this.handleError(error)));
     }
 
     getBook(id: number | string): Observable<Book> {
-        return this.http.get(URL + id, { withCredentials: true }).pipe(
-            map((response: Book) => response),
-            catchError((error) => this.handleError(error)),
-        );
+        return this.http.get<Book>(URL + id, { withCredentials: true }).pipe(catchError((error) => this.handleError(error)));
     }
 
-    saveBook(book: Book) {
+    saveBook(book: Book): Observable<Book> {
+
         const body = JSON.stringify(book);
+        
         const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
+            Authorization: this.loginService.getAuth(),
             'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Allow-Origin': '*',
+            'Cache-Control': 'no-cache', // due to IE browser caches API get requests
         });
 
+        console.log(book);
+
         if (!book.id) {
-            return this.http.post(URL, body, { headers, observe: 'response', withCredentials: true }).pipe(
-                map((response: HttpResponse<any>) => response.body),
-                catchError((error) => this.handleError(error)),
-            );
+            return this.http
+                .post<Book>(URL, body, { headers, withCredentials: true })
+                .pipe(catchError((error) => this.handleError(error)));
         } else {
-            return this.http.put(URL+book.id, body, { headers, observe: 'response', withCredentials: true }).pipe(
-                map((response: HttpResponse<any>) => response.body),
-                catchError((error) => this.handleError(error)),
-            );
+            return this.http
+                .put<Book>(URL + book.id, body, { headers, withCredentials: true })
+                .pipe(catchError((error) => this.handleError(error)));
         }
     }
 
-    removeBook(book: Book) {
+    removeBook(book: Book): Observable<Book> {
         const headers = new HttpHeaders({
+            Authorization: this.loginService.getAuth(),
             'X-Requested-With': 'XMLHttpRequest',
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Allow-Origin': '*',
+            'Cache-Control': 'no-cache', // due to IE browser caches API get requests
         });
 
-        return this.http.delete(URL + book.id, { withCredentials: true, headers }).pipe(
-            map((response) => undefined),
-            catchError((error) => this.handleError(error)),
-        );
-    }
-
-    updateBook(book: Book) {
-        const body = JSON.stringify(book);
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-        });
-        return this.http.put(URL + book.id, body, { headers, observe: 'response', withCredentials: true }).pipe(
-            map((response: HttpResponse<any>) => response.body),
-            catchError((error) => this.handleError(error)),
-        );
+        return this.http
+            .delete<Book>(URL + book.id, { withCredentials: true, headers })
+            .pipe(catchError((error) => this.handleError(error)));
     }
 
     private handleError(error: any) {
         console.error(error);
-        return Observable.throw('Server error (' + error.status + '): ' + error.text());
+        return Observable.throw('Server error (' + error.status + '): ' + error);
     }
 }

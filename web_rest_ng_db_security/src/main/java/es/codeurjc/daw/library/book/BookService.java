@@ -22,8 +22,8 @@ public class BookService {
 		return repository.findAll();
 	}
 
-	public void save(Book book) {
-		repository.save(book);
+	public Book save(Book book) {
+		return repository.save(book);
 	}
 
 	public void delete(long id) {
