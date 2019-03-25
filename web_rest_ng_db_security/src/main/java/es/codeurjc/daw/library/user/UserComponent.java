@@ -9,7 +9,7 @@ import org.springframework.web.context.annotation.SessionScope;
  * auto-wiring it as usual.
  * 
  * Instances of this class are never sent to the user in any REST endpoint. It
- * can hold sensible information that can not be known in the client. 
+ * can hold sensible information that can not be known in the client.
  * 
  * NOTE: This class is intended to be extended by developer adding new
  * attributes. Current attributes can not be removed because they are used in
@@ -20,18 +20,23 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class UserComponent {
 
-	private User user;
+    private User user;
 
-	public User getLoggedUser() {
-		return user;
-	}
+    public User getLoggedUser() {
+        return user;
+    }
 
-	public void setLoggedUser(User user) {
-		this.user = user;
-	}
+    public void setLoggedUser(User user) {
+        this.user = user;
+    }
 
-	public boolean isLoggedUser() {
-		return this.user != null;
-	}
+    public boolean isLoggedUser() {
+        return this.user != null;
+    }
 
+    @Override
+    public String toString() {
+        return "UserComponent [user="
+                + (user != null ? user.toString() : "null") + "]";
+    }
 }

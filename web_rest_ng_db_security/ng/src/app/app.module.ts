@@ -94,6 +94,7 @@ import { routing } from './app.routing';
         MatNativeDateModule,
         MatSliderModule,
         MatAutocompleteModule,
+        MatInputModule,
         /** Covalent Modules */
         CovalentCommonModule,
         CovalentLayoutModule,
@@ -110,13 +111,11 @@ import { routing } from './app.routing';
         CovalentMessageModule,
         /** Additional **/
         NgxChartsModule,
-
-        HttpModule, //Remove when migrated to HttpClient
-        routing
+        routing,
     ],
     declarations: [AppComponent, BookDetailComponent, BookListComponent, BookFormComponent, LoginComponent],
     bootstrap: [AppComponent],
-    providers: [BookService, LoginService]
+    providers: [BookService, LoginService],
 })
 export class AppModule {
     constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
