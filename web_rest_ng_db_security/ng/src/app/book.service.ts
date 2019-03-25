@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { LoginService } from './login.service';
+import { LoginService } from './auth/login.service';
 
 export interface Book {
     id?: number;
@@ -10,7 +10,7 @@ export interface Book {
     description: string;
 }
 
-const URL = 'https://localhost:8443/api/books/';
+const URL = '/api/books/';
 @Injectable()
 export class BookService {
     constructor(private loginService: LoginService, private http: HttpClient) {}
@@ -28,38 +28,23 @@ export class BookService {
         const body = JSON.stringify(book);
         
         const headers = new HttpHeaders({
-            Authorization: this.loginService.getAuth(),
-            'X-Requested-With': 'XMLHttpRequest',
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Credentials': 'true',
-            'Access-Control-Allow-Origin': '*',
-            'Cache-Control': 'no-cache', // due to IE browser caches API get requests
         });
-
-        console.log(book);
 
         if (!book.id) {
             return this.http
-                .post<Book>(URL, body, { headers, withCredentials: true })
+                .post<Book>(URL, body, { headers })
                 .pipe(catchError((error) => this.handleError(error)));
         } else {
             return this.http
-                .put<Book>(URL + book.id, body, { headers, withCredentials: true })
+                .put<Book>(URL + book.id, body, { headers })
                 .pipe(catchError((error) => this.handleError(error)));
         }
     }
 
     removeBook(book: Book): Observable<Book> {
-        const headers = new HttpHeaders({
-            Authorization: this.loginService.getAuth(),
-            'X-Requested-With': 'XMLHttpRequest',
-            'Access-Control-Allow-Credentials': 'true',
-            'Access-Control-Allow-Origin': '*',
-            'Cache-Control': 'no-cache', // due to IE browser caches API get requests
-        });
-
         return this.http
-            .delete<Book>(URL + book.id, { withCredentials: true, headers })
+            .delete<Book>(URL + book.id)
             .pipe(catchError((error) => this.handleError(error)));
     }
 

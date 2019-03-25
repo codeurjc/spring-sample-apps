@@ -18,12 +18,9 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-	    //http.cors();
 	    http.antMatcher("/api/**");
 	    
-	    http.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll();		
-		
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/logIn").authenticated();
+	    http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/logIn").authenticated();
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/logOut").permitAll();
 				
 		// URLs that need authentication to access to it

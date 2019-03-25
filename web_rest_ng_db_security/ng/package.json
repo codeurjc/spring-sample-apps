@@ -36,8 +36,7 @@
     },
     "scripts": {
         "ng": "ng",
-        "start2": "ng serve --proxy-config proxy.conf.json --ssl true",
-        "start": "ng serve",
+        "start": "ng serve --proxy-config proxy.conf.json",
         "build": "ng build",
         "test": "ng test",
         "lint": "ng lint",

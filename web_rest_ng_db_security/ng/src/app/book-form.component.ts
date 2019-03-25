@@ -6,6 +6,7 @@ import { Book, BookService } from './book.service';
     templateUrl: 'book-form.component.html',
 })
 export class BookFormComponent {
+    
     newBook: boolean;
     book: Book;
 
@@ -26,9 +27,7 @@ export class BookFormComponent {
 
     save() {
         this.service.saveBook(this.book).subscribe(
-            (book) => {
-                console.log('Book saved!', book);
-            },
+            _ => {},
             (error: Error) => console.error('Error creating new book: ' + error),
         );
         window.history.back();
