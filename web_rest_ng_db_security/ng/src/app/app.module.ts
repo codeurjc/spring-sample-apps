@@ -63,6 +63,7 @@ import { LoginComponent } from './login.component';
 import { routing } from './app.routing';
 import { ErrorInterceptor } from './auth/error.interceptor';
 import { BasicAuthInterceptor } from './auth/auth.interceptor';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 @NgModule({
     imports: [
@@ -117,10 +118,11 @@ import { BasicAuthInterceptor } from './auth/auth.interceptor';
     ],
     declarations: [AppComponent, BookDetailComponent, BookListComponent, BookFormComponent, LoginComponent],
     bootstrap: [AppComponent],
-    providers: [BookService, LoginService,  
+    providers: [BookService, LoginService,
         { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-],
+        { provide: LocationStrategy, useClass: HashLocationStrategy }
+    ],
 })
 export class AppModule {
     constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
